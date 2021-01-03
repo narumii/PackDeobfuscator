@@ -18,6 +18,7 @@
 - IcePack
 - SWPack
 - ShellPack
+- MCGuard (minecraft spigot/bungee)
 
 ### DONE
 - TB-Client
