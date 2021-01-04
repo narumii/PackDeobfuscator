@@ -20,7 +20,6 @@ class SPStringDecryption : Transformer {
         var index = 0
         deobfuscator.classes.forEach {
             val classNode = it.value
-
             if (!found) {
                 val fieldNode = classNode.fields.stream().filter { it.name.equals("drong") }
                     .findFirst()
@@ -32,11 +31,7 @@ class SPStringDecryption : Transformer {
             }
 
             val lowerClassName = classNode.name.toLowerCase()
-            if (!lowerClassName.startsWith("i") || !lowerClassName.endsWith("i")) {
-                return@forEach
-            }
-
-            if (lowerClassName.length <= 3) {
+            if (!lowerClassName.startsWith("i") || !lowerClassName.endsWith("i") || lowerClassName.length <= 3) {
                 return@forEach
             }
 

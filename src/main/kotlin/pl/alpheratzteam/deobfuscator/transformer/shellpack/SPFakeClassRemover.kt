@@ -14,15 +14,7 @@ class SPFakeClassRemover : Transformer {
         var index = 0
         deobfuscator.classes.forEach {
             val classNode = it.value
-            if (classNode.version != 49) {
-                return@forEach
-            }
-
-            if (classNode.methods.size != 2) {
-                return@forEach
-            }
-
-            if (classNode.name.length <= 3) {
+            if (classNode.version != 49 || classNode.methods.size != 2 || classNode.name.length <= 3) {
                 return@forEach
             }
 
