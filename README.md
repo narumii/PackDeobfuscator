@@ -1,4 +1,5 @@
 ### TODO
+- EthyrObfuscator
 - NS-Client
 - CM-Pack
 - BlazingPack
