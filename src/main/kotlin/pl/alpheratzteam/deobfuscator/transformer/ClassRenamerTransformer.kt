@@ -5,6 +5,7 @@ import org.objectweb.asm.commons.SimpleRemapper
 import org.objectweb.asm.tree.ClassNode
 import pl.alpheratzteam.deobfuscator.Deobfuscator
 import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
+import pl.alpheratzteam.deobfuscator.yaml.YamlHelper
 import java.io.BufferedReader
 import java.io.FileReader
 
@@ -16,9 +17,10 @@ import java.io.FileReader
 class ClassRenamerTransformer : Transformer {
 
     override fun transform(deobfuscator: Deobfuscator) {
+        val yamlHelper = YamlHelper("config.yml")
         val classMappings = mutableMapOf<String, String>()
         val mappings = mutableMapOf<String, String>()
-        val bufferedReader = BufferedReader(FileReader("deobfuscator/shellpack-mappings.srg"))
+        val bufferedReader = BufferedReader(FileReader(yamlHelper.getString("mappings")))
         bufferedReader.lines().forEach {
             if (!it.startsWith("CL:")) {
                 return@forEach

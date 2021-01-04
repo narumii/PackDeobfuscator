@@ -5,3 +5,5 @@ transformers:
   - 'SPStringDecryption'
   - 'IllegalDataRemover'
   - 'ClassRenamerTransformer'
+
+mappings: 'pack-configs/mappings/shellpack.srg'
