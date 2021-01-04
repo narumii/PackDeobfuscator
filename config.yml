@@ -1,5 +1,7 @@
 transformers:
-  - 'SPIllegalClassRemover'
-  - 'SPFakeClassRemover'
-  - 'SPNumberDecryption'
-  - 'SPStringDecryption'
+   - 'SPIllegalClassRemover'
+   - 'SPFakeClassRemover'
+   - 'SPNumberDecryption'
+   - 'SPStringDecryption'
+   - 'IllegalDataRemover'
+   - 'ClassRenamerTransformer'
