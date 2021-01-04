@@ -17,8 +17,10 @@
 - NinjaPack
 - IcePack
 - SWPack
-- ShellPack
 - MCGuard (minecraft spigot/bungee)
+
+> Mapping creator - comparing certain things in classes and checking % similarity 
 
 ### DONE
 - TB-Client
+- ShellPack

@@ -1,4 +1,4 @@
-package pl.alpheratzteam.deobfuscator.transformer.tb_client.util;
+package pl.alpheratzteam.deobfuscator.transformer.tbclient.util;
 
 /**
  * @author Unix

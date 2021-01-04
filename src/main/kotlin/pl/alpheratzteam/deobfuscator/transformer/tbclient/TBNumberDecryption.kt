@@ -1,8 +1,7 @@
-package pl.alpheratzteam.deobfuscator.transformer.tb_client
+package pl.alpheratzteam.deobfuscator.transformer.tbclient
 
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.LdcInsnNode
-import org.objectweb.asm.tree.TypeInsnNode
 import pl.alpheratzteam.deobfuscator.Deobfuscator
 import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
 import pl.alpheratzteam.deobfuscator.util.ASMUtil

@@ -18,6 +18,8 @@ dependencies {
     implementation("org.ow2.asm:asm-tree:9.0")
     implementation("org.ow2.asm:asm-commons:9.0")
     implementation("org.ow2.asm:asm-util:9.0")
+    implementation("org.yaml:snakeyaml:1.27")
+    implementation("com.google.guava:guava:30.1-jre")
     testImplementation(kotlin("test-junit"))
     implementation(kotlin("reflect"))
 }
@@ -31,5 +33,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClassName = "pl.alpheratzteam.deobfuscator.MainKt"
+    mainClass.set("pl.alpheratzteam.deobfuscator.MainKt")
 }

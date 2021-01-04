@@ -1,11 +1,14 @@
 package pl.alpheratzteam.deobfuscator
 
+import com.google.common.reflect.ClassPath
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
 import org.objectweb.asm.tree.ClassNode
-import pl.alpheratzteam.deobfuscator.transformer.tb_client.TBIllegalFieldRemover
-import pl.alpheratzteam.deobfuscator.transformer.tb_client.TBNumberDecryption
-import pl.alpheratzteam.deobfuscator.transformer.tb_client.TBStringDecryption
+import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
 import pl.alpheratzteam.deobfuscator.util.JarUtil
+import pl.alpheratzteam.deobfuscator.yaml.YamlHelper
 import java.io.File
+
 
 /**
  * @author Unix
@@ -34,7 +37,23 @@ class Deobfuscator {
             assets.putAll(second)
         }
 
-        val transformers = mutableListOf(TBStringDecryption(), TBNumberDecryption(), TBIllegalFieldRemover()) // modifiers
+        val yamlHelper = YamlHelper("config.yml")
+        val transformers = mutableListOf<Transformer>() // modifiers
+        val classPath: ClassPath = ClassPath.from(Thread.currentThread().contextClassLoader)
+        yamlHelper.getStringList("transformers").forEach { // load modifiers from yml
+            classPath.topLevelClasses
+                .stream()
+                .filter { classInfo -> classInfo.simpleName.equals(it) }
+                .findFirst()
+                .ifPresent { classInfo ->
+                    try {
+                        transformers.add(classInfo.load().newInstance() as Transformer)
+                    } catch (ex: Exception) {
+                        ex.printStackTrace()
+                    }
+                }
+        }
+
         transformers.forEach {
             val name = it.javaClass.simpleName
             var time = System.currentTimeMillis()
@@ -50,5 +69,11 @@ class Deobfuscator {
         }.run {
             println("Saved jar!")
         }
+    }
+
+    fun getClassSize(classNode: ClassNode?): Int {
+        val classWriter = ClassWriter(0)
+        classNode?.accept(classWriter)
+        return ClassReader(classWriter.toByteArray()).getItemCount()
     }
 }

@@ -1,10 +1,10 @@
-package pl.alpheratzteam.deobfuscator.transformer.tb_client
+package pl.alpheratzteam.deobfuscator.transformer.tbclient
 
 import org.objectweb.asm.tree.LdcInsnNode
 import org.objectweb.asm.tree.MethodInsnNode
 import pl.alpheratzteam.deobfuscator.Deobfuscator
 import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
-import pl.alpheratzteam.deobfuscator.transformer.tb_client.util.TBStringDecryptionUtil
+import pl.alpheratzteam.deobfuscator.transformer.tbclient.util.TBStringDecryptionUtil
 
 /**
  * @author Unix
@@ -22,7 +22,7 @@ class TBStringDecryption : Transformer {
                         return@forEach
                     }
 
-                    if (!it.owner.equals("qProtect") && !it.name.equals("decode") && !it.desc.equals("(Ljava/lang/String;)Ljava/lang/String;")) {
+                    if (!it.owner.equals("qProtect") || !it.name.equals("decode") || !it.desc.equals("(Ljava/lang/String;)Ljava/lang/String;")) {
                         return@forEach
                     }
 

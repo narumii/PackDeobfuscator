@@ -1,4 +1,4 @@
-package pl.alpheratzteam.deobfuscator.transformer.tb_client
+package pl.alpheratzteam.deobfuscator.transformer.tbclient
 
 import org.objectweb.asm.Opcodes
 import org.objectweb.asm.tree.FieldInsnNode
