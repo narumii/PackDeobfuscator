@@ -34,13 +34,10 @@ class ClassRenamerTransformer : Transformer {
 
         deobfuscator.classes.forEach {
             val classNode = it.value
-
             var className = classNode.name
-            do {
-                if (classMappings.containsKey(classNode.name)) {
-                    className = classMappings.get(classNode.name)
-                }
-            } while (mappings.containsValue(className))
+            if (classMappings.containsKey(classNode.name)) {
+                className = classMappings.get(classNode.name)
+            }
 
             mappings.put(classNode.name, className)
         }
