@@ -43,7 +43,7 @@ class Deobfuscator {
         yamlHelper.getStringList("transformers").forEach { // load modifiers from yml
             classPath.topLevelClasses
                 .stream()
-                .filter { classInfo -> classInfo.simpleName.equals(it) }
+                .filter { classInfo -> classInfo.simpleName == it }
                 .findFirst()
                 .ifPresent { classInfo ->
                     try {
@@ -74,6 +74,10 @@ class Deobfuscator {
     fun getClassSize(classNode: ClassNode?): Int {
         val classWriter = ClassWriter(0)
         classNode?.accept(classWriter)
-        return ClassReader(classWriter.toByteArray()).getItemCount()
+        return ClassReader(classWriter.toByteArray()).itemCount
+    }
+
+    fun getClassesAsCollection() : Collection<ClassNode> {
+        return classes.values
     }
 }

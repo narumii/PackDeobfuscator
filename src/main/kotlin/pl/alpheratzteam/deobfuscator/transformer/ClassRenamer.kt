@@ -14,17 +14,20 @@ import java.io.FileReader
  * @since 04.01.2021
  */
 
-class ClassRenamerTransformer : Transformer {
+class ClassRenamer : Transformer {
 
     override fun transform(deobfuscator: Deobfuscator) {
+        var index = 0
         val yamlHelper = YamlHelper("config.yml")
         val classMappings = mutableMapOf<String, String>()
         val mappings = mutableMapOf<String, String>()
         val bufferedReader = BufferedReader(FileReader(yamlHelper.getString("mappings")))
         bufferedReader.lines().forEach {
-            if (!it.startsWith("CL:")) {
+            if (!it.startsWith("CL:")) { // CL: - classes
                 return@forEach
             }
+
+            // TODO: 05.01.2021 methods (MD:), fields (FD:)
 
             val split = it.replaceFirst("CL: ", "").split(" ")
             val fakeName = split[0]
@@ -34,10 +37,8 @@ class ClassRenamerTransformer : Transformer {
 
         deobfuscator.classes.forEach {
             val classNode = it.value
-            var className = classNode.name
-            if (classMappings.containsKey(classNode.name)) {
-                className = classMappings.get(classNode.name)
-            }
+            val className = (if (classMappings.containsKey(classNode.name)) classMappings[classNode.name] else "Class_" + ++index)
+                ?: return@forEach
 
             mappings.put(classNode.name, className)
         }
