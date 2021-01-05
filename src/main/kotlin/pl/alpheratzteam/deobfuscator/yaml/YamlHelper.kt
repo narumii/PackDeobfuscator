@@ -24,8 +24,8 @@ class YamlHelper(file: String) {
         return objs[name] as Int
     }
 
-    fun getString(name: String) : String {
-        return objs[name] as String
+    fun getString(name: String) : String? {
+        return if (objs.containsKey(name)) objs[name] as String else null
     }
 
     fun getStringList(name: String) : List<String> {

@@ -15,8 +15,7 @@ import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
 class TBIllegalFieldRemover : Transformer {
     override fun transform(deobfuscator: Deobfuscator) {
         var index = 0
-        deobfuscator.classes.forEach {
-            val classNode = it.value
+        deobfuscator.getClassesAsCollection().forEach { classNode ->
             val fields = mutableListOf<FieldNode>()
             classNode.fields.forEach {
                 if (it.name.toCharArray()[0].toInt() <= 127) {
@@ -29,8 +28,7 @@ class TBIllegalFieldRemover : Transformer {
 
             fields.forEach { classNode.fields.remove(it) }
 
-            classNode.methods.forEach {
-                val methodNode = it
+            classNode.methods.forEach { methodNode ->
                 methodNode.instructions.forEach {
                     if (it !is FieldInsnNode) {
                         return@forEach

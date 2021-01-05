@@ -1,6 +1,7 @@
 transformers:
-   - 'IllegalDataRemover'
-   - 'ClassRenamer'
+   - 'NSStringDecryption'
    - 'LocalVariableRenamer'
-
-mappings: 'pack-configs/mappings/lunarclient.srg'
+   - 'ClassDecryptor'
+   - 'ClassRenamer'
+   - 'IllegalDataRemover'
+   - 'NSStringDecryption'

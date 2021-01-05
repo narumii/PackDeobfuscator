@@ -14,8 +14,7 @@ class SPNumberDecryption : Transformer {
     override fun transform(deobfuscator: Deobfuscator) {
         var index = 0
         deobfuscator.classes.forEach {
-            it.value.methods.forEach {
-                val methodNode = it
+            it.value.methods.forEach { methodNode ->
                 methodNode.instructions.forEach {
                     if (!ASMUtil.isIntInsn(it)) { // first ldc
                         return@forEach

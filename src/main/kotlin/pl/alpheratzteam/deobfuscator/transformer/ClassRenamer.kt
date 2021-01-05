@@ -7,6 +7,7 @@ import pl.alpheratzteam.deobfuscator.Deobfuscator
 import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
 import pl.alpheratzteam.deobfuscator.yaml.YamlHelper
 import java.io.BufferedReader
+import java.io.FileNotFoundException
 import java.io.FileReader
 
 /**
@@ -21,34 +22,36 @@ class ClassRenamer : Transformer {
         val yamlHelper = YamlHelper("config.yml")
         val classMappings = mutableMapOf<String, String>()
         val mappings = mutableMapOf<String, String>()
-        val bufferedReader = BufferedReader(FileReader(yamlHelper.getString("mappings")))
-        bufferedReader.lines().forEach {
-            if (!it.startsWith("CL:")) { // CL: - classes
-                return@forEach
+
+        val mappingsFile = yamlHelper.getString("mappings")
+        if (mappingsFile != null) {
+            val bufferedReader = BufferedReader(FileReader(mappingsFile))
+            bufferedReader.lines().forEach {
+                if (!it.startsWith("CL:")) { // CL: - classes
+                    return@forEach
+                }
+
+                // TODO: 05.01.2021 methods (MD:), fields (FD:)
+
+                val split = it.replaceFirst("CL: ", "").split(" ")
+                val fakeName = split[0]
+                val originalName = split[1]
+                classMappings[fakeName] = originalName
             }
-
-            // TODO: 05.01.2021 methods (MD:), fields (FD:)
-
-            val split = it.replaceFirst("CL: ", "").split(" ")
-            val fakeName = split[0]
-            val originalName = split[1]
-            classMappings[fakeName] = originalName
         }
 
-        deobfuscator.classes.forEach {
-            val classNode = it.value
-            val className = (if (classMappings.containsKey(classNode.name)) classMappings[classNode.name] else "Class_" + ++index)
+        deobfuscator.getClassesAsCollection().forEach {
+            val className = (if (classMappings.containsKey(it.name)) classMappings[it.name] else "Class_" + ++index)
                 ?: return@forEach
 
-            mappings.put(classNode.name, className)
+            mappings.put(it.name, className)
         }
 
         val classNodeMap = mutableMapOf<String, ClassNode>()
         val remapper = SimpleRemapper(mappings)
-        deobfuscator.classes.forEach {
-            val classNode = it.value
+        deobfuscator.getClassesAsCollection().forEach {
             val copy = ClassNode()
-            classNode.accept(ClassRemapper(copy, remapper))
+            it.accept(ClassRemapper(copy, remapper))
             classNodeMap.put(copy.name, copy)
         }
 

@@ -30,6 +30,7 @@ PackDeobfuscator is fairly easy to set up as most of the process is handled auto
 - IcePack
 - SWPack
 - MCGuard (minecraft spigot/bungee)
+- Aritum
 ***
 
 ## DONE

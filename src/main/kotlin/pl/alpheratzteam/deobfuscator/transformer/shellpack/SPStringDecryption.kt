@@ -18,8 +18,7 @@ class SPStringDecryption : Transformer {
         var stringBaseClass = ""
         var found = false
         var index = 0
-        deobfuscator.classes.forEach {
-            val classNode = it.value
+        deobfuscator.getClassesAsCollection().forEach { classNode ->
             if (!found) {
                 val fieldNode = classNode.fields.stream().filter { it.name.equals("drong") }
                     .findFirst()
@@ -96,12 +95,12 @@ class SPStringDecryption : Transformer {
         }
 
         println("String Base Class: $stringBaseClass")
-        deobfuscator.classes.forEach {
-            val classNode = it.value
-            if (!classNode.name.startsWith(stringBaseClass)) {
-                return@forEach
-            }
-        }
+//        deobfuscator.classes.forEach {
+//            val classNode = it.value
+//            if (!classNode.name.startsWith(stringBaseClass)) {
+//                return@forEach
+//            }
+//        }
 
         // TODO: 04.01.2021 change drong[number] to string using virtualizer?
         println("Decrypted $index strings!")
