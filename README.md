@@ -9,11 +9,11 @@ PackDeobfuscator is fairly easy to set up as most of the process is handled auto
 - [shellpack](https://github.com/alpheratzteam/PackDeobfuscator/blob/main/pack-configs/shellpack.yml) - [mappings](https://github.com/alpheratzteam/PackDeobfuscator/blob/main/pack-configs/mappings/shellpack.srg)
 - [labymod](https://github.com/alpheratzteam/PackDeobfuscator/blob/main/pack-configs/labymod.yml) - [mappings](https://github.com/alpheratzteam/PackDeobfuscator/blob/main/pack-configs/mappings/shellpack.srg)
 - [lunarclient](https://github.com/alpheratzteam/PackDeobfuscator/blob/main/pack-configs/lunarclient.yml) - [mappings](https://github.com/alpheratzteam/PackDeobfuscator/blob/main/pack-configs/mappings/lunarclient.srg)
+- [nsclient](https://github.com/alpheratzteam/PackDeobfuscator/blob/main/pack-configs/nsclient.yml)
 ***
 
 ## Packs TODO RE 
 ***
-- NS-Client
 - CM-Pack
 - BlazingPack
 - Badlion (Remapper)
@@ -39,6 +39,7 @@ PackDeobfuscator is fairly easy to set up as most of the process is handled auto
 - ShellPack
 - LabyMod (Remapper)
 - Lunar (Remapper)
+- NS-Client
 ***
 
 ### Deobfuscator TODO:
