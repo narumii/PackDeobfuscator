@@ -21,34 +21,24 @@ class ClassRenamerTransformer : Transformer {
         val classMappings = mutableMapOf<String, String>()
         val mappings = mutableMapOf<String, String>()
         val bufferedReader = BufferedReader(FileReader(yamlHelper.getString("mappings")))
-        bufferedReader.lines().forEach {
-            if (!it.startsWith("CL:")) {
-                return@forEach
-            }
 
-            val split = it.replaceFirst("CL: ", "").split(" ")
-            val fakeName = split[0]
-            val originalName = split[1]
-            classMappings[fakeName] = originalName
-        }
+        bufferedReader.lines().filter { it.startsWith("CL:") }
+                .forEach {
+                    val split = it.replaceFirst("CL: ", "").split(" ")
+                    classMappings[split[0]] = split[1]
+                }
 
         deobfuscator.classes.forEach {
-            val classNode = it.value
-            var className = classNode.name
-            if (classMappings.containsKey(classNode.name)) {
-                className = classMappings.get(classNode.name)
-            }
-
-            mappings.put(classNode.name, className)
+            val className = classMappings.getOrDefault(it.value.name, it.value.name)
+            mappings[it.value.name] = className
         }
 
         val classNodeMap = mutableMapOf<String, ClassNode>()
         val remapper = SimpleRemapper(mappings)
         deobfuscator.classes.forEach {
-            val classNode = it.value
             val copy = ClassNode()
-            classNode.accept(ClassRemapper(copy, remapper))
-            classNodeMap.put(copy.name, copy)
+            it.value.accept(ClassRemapper(copy, remapper))
+            classNodeMap[copy.name] = copy
         }
 
         println("Remapped ${classMappings.size} classes!")

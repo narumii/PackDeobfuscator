@@ -8,6 +8,7 @@ import java.io.FileInputStream
  * @since 04.01.2021
  */
 
+//Konwerter be like \/
 class YamlHelper(file: String) {
 
     companion object {
@@ -20,15 +21,9 @@ class YamlHelper(file: String) {
         objs.putAll(yaml.load(FileInputStream(file)))
     }
 
-    fun getInt(name: String) : Int {
-        return objs[name] as Int
-    }
+    fun getInt(name: String) = objs[name] as Int
 
-    fun getString(name: String) : String {
-        return objs[name] as String
-    }
+    fun getString(name: String) = objs[name] as String
 
-    fun getStringList(name: String) : List<String> {
-        return objs[name] as List<String>
-    }
+    fun getStringList(name: String) = objs[name] as List<String>
 }

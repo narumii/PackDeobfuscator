@@ -9,11 +9,12 @@ import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
  */
 
 class IllegalDataRemover : Transformer {
+
+    //XD?
     override fun transform(deobfuscator: Deobfuscator) {
-        deobfuscator.classes.forEach {
-            val classNode = it.value
-            classNode.signature = null
-            classNode.sourceFile = null
+        deobfuscator.classes.values.forEach {
+            it.signature = null
+            it.sourceFile = null
         }
     }
 }

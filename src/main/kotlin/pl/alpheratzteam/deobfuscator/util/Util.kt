@@ -49,45 +49,37 @@ fun ldcInt(int: Int): AbstractInsnNode {
     }
 }
 
-fun ldcLong(long: Long): AbstractInsnNode {
-    return when (long) {
-        0L -> InsnNode(LCONST_0)
-        1L -> InsnNode(LCONST_1)
-        else -> LdcInsnNode(long)
-    }
+fun ldcLong(long: Long) = when (long) {
+    0L -> InsnNode(LCONST_0)
+    1L -> InsnNode(LCONST_1)
+    else -> LdcInsnNode(long)
 }
 
-fun ldcDouble(double: Double): AbstractInsnNode {
-    return when (double) {
-        0.0 -> InsnNode(DCONST_0)
-        1.0 -> InsnNode(DCONST_1)
-        else -> LdcInsnNode(double)
-    }
+fun ldcDouble(double: Double) = when (double) {
+    0.0 -> InsnNode(DCONST_0)
+    1.0 -> InsnNode(DCONST_1)
+    else -> LdcInsnNode(double)
 }
 
-fun ldcFloat(float: Float): AbstractInsnNode {
-    return when (float) {
-        0f -> InsnNode(FCONST_0)
-        1f -> InsnNode(FCONST_1)
-        2f -> InsnNode(FCONST_2)
-        else -> LdcInsnNode(float)
-    }
+fun ldcFloat(float: Float) = when (float) {
+    0f -> InsnNode(FCONST_0)
+    1f -> InsnNode(FCONST_1)
+    2f -> InsnNode(FCONST_2)
+    else -> LdcInsnNode(float)
 }
 
-inline fun constructTableSwitch(
+fun constructTableSwitch(
     baseNumber: Int,
     defaultLabel: LabelNode,
     vararg targetLabels: LabelNode
-): TableSwitchInsnNode {
-    return TableSwitchInsnNode(
+) = TableSwitchInsnNode(
         baseNumber,
         baseNumber + targetLabels.size - 1,
         defaultLabel,
         *targetLabels
     )
-}
 
-inline fun constructLookupSwitch(
+fun constructLookupSwitch(
     defaultLabel: LabelNode,
     lookup: Array<Pair<Int, LabelNode>>
 ): LookupSwitchInsnNode {

@@ -6,7 +6,6 @@
 - Badlion (Remapper)
 - XSGuard
 - DayPack
-- LabyMod (Remapper)
 - LoungeClient
 - Lunar
 - DreamPack
@@ -25,3 +24,6 @@
 ### DONE
 - TB-Client
 - ShellPack
+- LabyMod (Remapper)
+
+# Kreditzy dla mnie bo naprawilem w wiekszosci ten spierdolony kod xd

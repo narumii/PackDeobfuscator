@@ -7,11 +7,10 @@ package pl.alpheratzteam.deobfuscator.transformer.shellpack.util;
 
 public final class StringDecryptionUtil {
 
-    private StringDecryptionUtil() {
-    }
+    private StringDecryptionUtil() {}
 
-    public static String decrypt(String string, String stringsPoolClassName, int size) {
-        final char[] chars = string.toCharArray();
+    public static String decrypt(String string, int size) {
+        char[] chars = string.toCharArray();
 
         int i = 0;
         for (char c : chars) {
@@ -23,7 +22,6 @@ public final class StringDecryptionUtil {
             chars[i] = c;
             i++;
         }
-
         return new String(chars);
     }
 }

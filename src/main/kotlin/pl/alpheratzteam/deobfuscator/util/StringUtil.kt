@@ -24,7 +24,7 @@ object StringUtil {
 
     fun generateString(length: Int): String { // generate custom string
         return IntStream.range(0, length)
-            .mapToObj { i: Int ->
+            .mapToObj {
                 Character.toString(
                     chars[RandomUtil.int(chars.size)]
                 )

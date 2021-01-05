@@ -13,15 +13,13 @@ import java.io.FileWriter
 class MappingCreator : Transformer {
     override fun transform(deobfuscator: Deobfuscator) {
         val mappings = mutableMapOf<String, String>()
-        deobfuscator.classes.forEach {
-            val classNode = it.value
+        deobfuscator.classes.values.forEach { classNode ->
             val field = classNode.fields.stream().filter { it.name.startsWith("__OBFID") }.findFirst()
             field.ifPresent {
                 mappings[classNode.name] = it.value as String
                 println("Mapping: ${classNode.name} : ${it.value}")
             }
         }
-
         val fileWriter = FileWriter(File("mappings.txt"))
         mappings.forEach { fileWriter.write(it.key + ":" + it.value + "\n" )}
         fileWriter.close()

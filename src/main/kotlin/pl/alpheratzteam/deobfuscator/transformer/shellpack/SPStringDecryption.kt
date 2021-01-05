@@ -73,7 +73,7 @@ class SPStringDecryption : Transformer {
                         return@forEach
                     }
 
-                    it.cst = StringDecryptionUtil.decrypt(it.cst.toString(), classNode.name, size)
+                    it.cst = StringDecryptionUtil.decrypt(it.cst.toString(), size)
                     val fieldInsnNode = it.previous
                         ?: // FieldInsnNode?
                         return@forEach

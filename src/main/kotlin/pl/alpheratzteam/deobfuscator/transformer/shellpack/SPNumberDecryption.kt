@@ -13,39 +13,29 @@ import pl.alpheratzteam.deobfuscator.util.ASMUtil
 class SPNumberDecryption : Transformer {
     override fun transform(deobfuscator: Deobfuscator) {
         var index = 0
-        deobfuscator.classes.forEach {
-            it.value.methods.forEach {
-                val methodNode = it
-                methodNode.instructions.forEach {
-                    if (!ASMUtil.isIntInsn(it)) { // first ldc
-                        return@forEach
-                    }
+        deobfuscator.classes.values.forEach { classNode ->
+            classNode.methods.forEach { methodNode ->
+                methodNode.instructions.toArray()
+                        .filter { ASMUtil.isIntInsn(it) }
+                        .filter { ASMUtil.isIntInsn(it.next) }
+                        .filter { it.next.next.opcode != Opcodes.IAND }
+                        .forEach {
+                            val secondNumberInsn = it.next
+                            val iand = secondNumberInsn.next
+                            val firstNumber = ASMUtil.getIntFromInsn(it)
+                            val secondNumber = ASMUtil.getIntFromInsn(secondNumberInsn)
+                            val originalNumber = firstNumber and secondNumber
 
-                    val secondNumberInsn = it.next ?: return@forEach
-                    if (!ASMUtil.isIntInsn(secondNumberInsn)) { // second ldc
-                        return@forEach
-                    }
-
-                    val iand = secondNumberInsn.next
-                    if (iand.opcode != Opcodes.IAND) { // iand
-                        return@forEach
-                    }
-
-                    val firstNumber = ASMUtil.getIntFromInsn(it)
-                    val secondNumber = ASMUtil.getIntFromInsn(secondNumberInsn)
-                    val originalNumber = firstNumber and secondNumber
-
-                    methodNode.instructions.insertBefore(it, ASMUtil.getIntInsn(originalNumber))
-                    with(methodNode.instructions) {
-                        remove(it) // first ldc
-                        remove(secondNumberInsn) // second ldc
-                        remove(iand) // iand
-                    }
-                    ++index
-                }
+                            methodNode.instructions.insertBefore(it, ASMUtil.getIntInsn(originalNumber))
+                            with(methodNode.instructions) {
+                                remove(it) // first ldc
+                                remove(secondNumberInsn) // second ldc
+                                remove(iand) // iand
+                            }
+                            ++index
+                        }
             }
         }
-
         println("Decrypted $index numbers!")
     }
 }

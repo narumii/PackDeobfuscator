@@ -76,41 +76,39 @@ object ASMUtil {
     }
 
     fun hasMethod(name: String, desc: String, clazz: ClassNode) =
-        clazz.methods != null && clazz.methods.any { it.desc == desc && it.name == name }
+            clazz.methods != null && clazz.methods.any { it.desc == desc && it.name == name }
 
     fun getIntInsn(value: Int) =
-        when (value) {
-            in -1..5 -> InsnNode(value + 3)
-            in Byte.MIN_VALUE..Byte.MAX_VALUE -> IntInsnNode(BIPUSH, value)
-            in Short.MIN_VALUE..Short.MAX_VALUE -> IntInsnNode(SIPUSH, value)
-            else -> LdcInsnNode(value)
-        }
+            when (value) {
+                in -1..5 -> InsnNode(value + 3)
+                in Byte.MIN_VALUE..Byte.MAX_VALUE -> IntInsnNode(BIPUSH, value)
+                in Short.MIN_VALUE..Short.MAX_VALUE -> IntInsnNode(SIPUSH, value)
+                else -> LdcInsnNode(value)
+            }
 
     fun getLongInsn(value: Long) =
-        when (value) {
-            in 0..1 -> InsnNode((value + 9).toInt())
-            else -> LdcInsnNode(value)
-        }
+            when (value) {
+                in 0..1 -> InsnNode((value + 9).toInt())
+                else -> LdcInsnNode(value)
+            }
 
     fun getFloatInsn(value: Float) =
-        when {
-            value % 1 == 0f && value in 0f..2f -> InsnNode((value + 11).toInt())
-            else -> LdcInsnNode(value)
-        }
+            when {
+                value % 1 == 0f && value in 0f..2f -> InsnNode((value + 11).toInt())
+                else -> LdcInsnNode(value)
+            }
 
     fun getDoubleInsn(value: Double) =
-        when {
-            value % 1 == 0.0 && value in 0.0..1.0 -> InsnNode((value + 14).toInt())
-            else -> LdcInsnNode(value)
-        }
-
-    fun isIntInsn(insn: AbstractInsnNode): Boolean {
-        return when {
-            Objects.isNull(insn) -> false
-            else -> {
-                val opcode = insn.opcode
-                (opcode in ICONST_M1..ICONST_5 || opcode == BIPUSH || opcode == SIPUSH || (insn is LdcInsnNode && insn.cst is Int))
+            when {
+                value % 1 == 0.0 && value in 0.0..1.0 -> InsnNode((value + 14).toInt())
+                else -> LdcInsnNode(value)
             }
+
+    fun isIntInsn(insn: AbstractInsnNode) = when {
+        Objects.isNull(insn) -> false
+        else -> {
+            val opcode = insn.opcode
+            (opcode in ICONST_M1..ICONST_5 || opcode == BIPUSH || opcode == SIPUSH || (insn is LdcInsnNode && insn.cst is Int))
         }
     }
 
@@ -122,40 +120,28 @@ object ASMUtil {
 
     // https://github.com/ItzSomebody/radon/blob/master/src/main/java/me/itzsomebody/radon/utils/ASMUtils.java
 
-    fun getIntFromInsn(insn: AbstractInsnNode): Int {
-        val opcode = insn.opcode
-        return when {
-            opcode in ICONST_M1..ICONST_5 -> opcode - 3
-            insn is IntInsnNode && insn.opcode !== NEWARRAY -> insn.operand
-            insn is LdcInsnNode && insn.cst is Int -> insn.cst as Int
-            else -> throw UnsupportedOperationException()
-        }
+    fun getIntFromInsn(insn: AbstractInsnNode) = when {
+        insn.opcode in ICONST_M1..ICONST_5 -> insn.opcode - 3
+        insn is IntInsnNode && insn.opcode !== NEWARRAY -> insn.operand
+        insn is LdcInsnNode && insn.cst is Int -> insn.cst as Int
+        else -> throw UnsupportedOperationException()
     }
 
-    fun getLongFromInsn(insn: AbstractInsnNode): Long {
-        val opcode = insn.opcode
-        return when {
-            opcode in LCONST_0..LCONST_1 -> (opcode - 9).toLong()
-            insn is LdcInsnNode && insn.cst is Long -> insn.cst as Long
-            else -> 0L
-        }
+    fun getLongFromInsn(insn: AbstractInsnNode) = when {
+        insn.opcode in LCONST_0..LCONST_1 -> (insn.opcode - 9).toLong()
+        insn is LdcInsnNode && insn.cst is Long -> insn.cst as Long
+        else -> 0L
     }
 
-    fun getFloatFromInsn(insn: AbstractInsnNode): Float {
-        val opcode = insn.opcode
-        return when {
-            opcode in FCONST_0..FCONST_2 -> (opcode - 11).toFloat()
-            insn is LdcInsnNode && insn.cst is Float -> insn.cst as Float
-            else -> .0f
-        }
+    fun getFloatFromInsn(insn: AbstractInsnNode) = when {
+        insn.opcode in FCONST_0..FCONST_2 -> (insn.opcode - 11).toFloat()
+        insn is LdcInsnNode && insn.cst is Float -> insn.cst as Float
+        else -> .0f
     }
 
-    fun getDoubleFromInsn(insn: AbstractInsnNode): Double {
-        val opcode = insn.opcode
-        return when {
-            opcode in DCONST_0..DCONST_1 -> (opcode - 14).toDouble()
-            insn is LdcInsnNode && insn.cst is Double -> insn.cst as Double
-            else -> .0
-        }
+    fun getDoubleFromInsn(insn: AbstractInsnNode) = when {
+        insn.opcode in DCONST_0..DCONST_1 -> (insn.opcode - 14).toDouble()
+        insn is LdcInsnNode && insn.cst is Double -> insn.cst as Double
+        else -> .0
     }
 }
