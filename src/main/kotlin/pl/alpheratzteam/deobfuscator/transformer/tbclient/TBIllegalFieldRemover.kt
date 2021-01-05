@@ -15,30 +15,60 @@ import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
 class TBIllegalFieldRemover : Transformer {
     override fun transform(deobfuscator: Deobfuscator) {
         var index = 0
-        //Bajkold haker boiii
-        deobfuscator.classes.values.forEach { classNode ->
-            classNode.fields.removeIf { it.name.toCharArray()[0].toInt() > 127 }
-            classNode.methods.forEach { methodNode ->
-                methodNode.instructions.toArray()
-                        .filter { it is FieldInsnNode && it.name.toCharArray()[0].toInt() > 127 }
-                        .filter { it.next is JumpInsnNode && it.next.opcode == Opcodes.IFEQ}
-                        .filter { it.next.next.opcode == Opcodes.ACONST_NULL }
-                        .filter { it.next.next.next.opcode == Opcodes.ATHROW }
-                        .forEach {
-                            val ifeq = it.next
-                            val aconst_null = ifeq.next
-                            val athrow = aconst_null.next
+        deobfuscator.getClassesAsCollection().forEach { classNode ->
+            val fields = mutableListOf<FieldNode>()
+            classNode.fields.forEach {
+                if (it.name.toCharArray()[0].toInt() <= 127) {
+                    return@forEach
+                }
 
-                            with (methodNode.instructions) {
-                                remove(it) // getstatic
-                                remove(ifeq) // ifeq
-                                remove(aconst_null) // aconst_null
-                                remove(athrow) // athrow
-                            }
-                            ++index
-                        }
+                fields.add(it)
+                ++index
+            }
+
+            fields.forEach { classNode.fields.remove(it) }
+
+            classNode.methods.forEach { methodNode ->
+                methodNode.instructions.forEach {
+                    if (it !is FieldInsnNode) {
+                        return@forEach
+                    }
+
+                    if (it.name.toCharArray()[0].toInt() <= 127) {
+                        return@forEach
+                    }
+
+                    val ifeq = it.next
+                    if (ifeq !is JumpInsnNode) { // ifeq?
+                        return@forEach
+                    }
+
+                    if (ifeq.opcode != Opcodes.IFEQ) { // ifeq?
+                        return@forEach
+                    }
+
+                    val aconst_null = ifeq.next
+                    if (aconst_null.opcode != Opcodes.ACONST_NULL) { // aconst_null?
+                        return@forEach
+                    }
+
+                    val athrow = aconst_null.next
+                    if (athrow.opcode != Opcodes.ATHROW) { // athrow?
+                        return@forEach
+                    }
+
+                    with (methodNode.instructions) {
+                        remove(it) // getstatic
+                        remove(ifeq) // ifeq
+                        remove(aconst_null) // aconst_null
+                        remove(athrow) // athrow
+                    }
+
+                    ++index
+                }
             }
         }
+
         println("Removed $index illegal fields!")
     }
 }

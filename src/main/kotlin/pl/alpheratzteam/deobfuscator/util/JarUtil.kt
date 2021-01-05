@@ -66,7 +66,7 @@ object JarUtil {
         }
     }
 
-    private fun asByteArray(inputStream: InputStream): ByteArray {
+    fun asByteArray(inputStream: InputStream): ByteArray {
         return try {
             val out = ByteArrayOutputStream()
 

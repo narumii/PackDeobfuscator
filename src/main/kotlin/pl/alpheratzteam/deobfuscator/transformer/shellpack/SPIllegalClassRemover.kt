@@ -10,13 +10,9 @@ import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
 
 class SPIllegalClassRemover : Transformer {
     override fun transform(deobfuscator: Deobfuscator) {
-        var index = 0
-        deobfuscator.classes.values
-                .filter { it.name.contains("?") }
-                .forEach {
-                    deobfuscator.classes.remove(it.name)
-                    ++index
-                }
-        println("Removed $index illegal classes!")
+        val classes = mutableListOf<String>()
+        deobfuscator.getClassesAsCollection().filter { it.name.contains("?") }.forEach { classes.add(it.name) }
+        classes.forEach { deobfuscator.classes.remove(it) }
+        println("Removed ${classes.size} illegal classes!")
     }
 }

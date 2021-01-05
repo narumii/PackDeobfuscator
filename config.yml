@@ -1,5 +1,7 @@
 transformers:
+   - 'NSStringDecryption'
+   - 'LocalVariableRenamer'
+   - 'ClassDecryptor'
+   - 'ClassRenamer'
    - 'IllegalDataRemover'
-   - 'ClassRenamerTransformer'
-
-mappings: 'pack-configs/mappings/labymod.srg'
+   - 'NSStringDecryption'

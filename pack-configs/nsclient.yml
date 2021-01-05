@@ -1,0 +1,7 @@
+transformers:
+  - 'NSStringDecryption'
+  - 'LocalVariableRenamer'
+  - 'ClassDecryptor'
+  - 'ClassRenamer'
+  - 'IllegalDataRemover'
+  - 'NSStringDecryption'

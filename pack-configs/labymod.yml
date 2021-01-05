@@ -1,5 +1,5 @@
 transformers:
    - 'IllegalDataRemover'
-   - 'ClassRenamerTransformer'
+   - 'ClassRenamer'
 
 mappings: 'pack-configs/mappings/labymod.srg'

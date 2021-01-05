@@ -1,0 +1,6 @@
+transformers:
+   - 'IllegalDataRemover'
+   - 'ClassRenamer'
+   - 'LocalVariableRenamer'
+
+mappings: 'pack-configs/mappings/lunarclient.srg'

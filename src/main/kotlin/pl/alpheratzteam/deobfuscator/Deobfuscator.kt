@@ -17,10 +17,11 @@ import java.io.File
 
 class Deobfuscator {
 
-    private val dataFolder: File = File("deobfuscator") // base folder
+    val dataFolder: File = File("deobfuscator") // base folder
 
     var classes: MutableMap<String, ClassNode> = mutableMapOf() // classes from jar
-    private var assets: MutableMap<String, ByteArray> = mutableMapOf() // assets from jar
+    var assets: MutableMap<String, ByteArray> = mutableMapOf() // assets from jar
+    lateinit var decryptKey: String // decrypt class key
 
     fun onStart() {
         val jarFile = File(dataFolder, "jars").apply { // create files
@@ -75,5 +76,9 @@ class Deobfuscator {
         val classWriter = ClassWriter(0)
         classNode?.accept(classWriter)
         return ClassReader(classWriter.toByteArray()).itemCount
+    }
+
+    fun getClassesAsCollection() : Collection<ClassNode> {
+        return classes.values
     }
 }

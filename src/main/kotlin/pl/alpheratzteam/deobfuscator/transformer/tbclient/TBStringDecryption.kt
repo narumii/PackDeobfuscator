@@ -12,22 +12,28 @@ import pl.alpheratzteam.deobfuscator.transformer.tbclient.util.TBStringDecryptio
  */
 
 class TBStringDecryption : Transformer {
-
-    //JA PIERDOLE UMIERAM POMUSZCIE MI
     override fun transform(deobfuscator: Deobfuscator) {
         var index = 0
+        deobfuscator.classes.forEach {
+            it.value.methods.forEach { methodNode ->
+                methodNode.instructions.forEach {
+                    if (it !is MethodInsnNode) {
+                        return@forEach
+                    }
 
-        deobfuscator.classes.values.forEach { classNode ->
-            classNode.methods.forEach { methodNode ->
-                methodNode.instructions.toArray()
-                        .filter { it is MethodInsnNode && it.owner == "qProtect" && it.name == "decode" }
-                        .filter { it.previous is LdcInsnNode }
-                        .forEach {
-                            val ldc = it.previous as LdcInsnNode
-                            methodNode.instructions.remove(it)
-                            ldc.cst = TBStringDecryptionUtil.decode(ldc.cst.toString())
-                            ++index
-                        }
+                    if (!it.owner.equals("qProtect") || !it.name.equals("decode") || !it.desc.equals("(Ljava/lang/String;)Ljava/lang/String;")) {
+                        return@forEach
+                    }
+
+                    if (it.previous !is LdcInsnNode) {
+                        return@forEach
+                    }
+
+                    val ldcInsnNode = it.previous as LdcInsnNode
+                    methodNode.instructions.remove(it)
+                    ldcInsnNode.cst = TBStringDecryptionUtil.decode(ldcInsnNode.cst.toString())
+                    ++index
+                }
             }
         }
 
