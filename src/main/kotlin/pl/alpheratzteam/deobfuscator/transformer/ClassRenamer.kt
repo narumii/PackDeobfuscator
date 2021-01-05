@@ -7,7 +7,6 @@ import pl.alpheratzteam.deobfuscator.Deobfuscator
 import pl.alpheratzteam.deobfuscator.api.transformer.Transformer
 import pl.alpheratzteam.deobfuscator.yaml.YamlHelper
 import java.io.BufferedReader
-import java.io.FileNotFoundException
 import java.io.FileReader
 
 /**
