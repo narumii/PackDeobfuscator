@@ -1,3 +1,5 @@
+# Idk ten deobfuscator jest w chuj smieszny ten kod unixa wyglada jakby ktos go wjebal do mixera wraz z konwenterem z javy do kotlina i rozdwojeniem jazni
+## Jak nie potrafisz kotlina to na chuj ten projekt robisz w kotlinie? Ja ktory nie potrafie kotlina bylem w stanie przepisac ten syf aby wygladal lepiej, taka czarna magia
 ### TODO
 - EthyrObfuscator
 - NS-Client
