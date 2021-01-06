@@ -1,4 +1,6 @@
 ## Getting started
+Na twoim miejscu to przepisalbym to do normalnej javy bo ten twoj kod wyglada jak by go ktos wpierdolil do mixera/pralki wraz z konwenterem java -> kotlin oraz rozdwojeniem jazni 
+> Idk czy  napewno wszystko dobrze poprawilem xd
 ***
 PackDeobfuscator is fairly easy to set up as most of the process is handled automatically by gradle.
 ***
