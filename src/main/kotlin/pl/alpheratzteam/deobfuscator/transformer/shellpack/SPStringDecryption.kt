@@ -12,6 +12,8 @@ import pl.alpheratzteam.deobfuscator.transformer.shellpack.util.StringDecryption
  * @since 04.01.2021
  */
 
+
+//TODO: YYY TEN KOD JEST TAK SPIERDOLONT ZE NAWET TEGO NIE ZMIENAM BO NIE WIEM CZY COS SPIERDOLONE DLATEGO PRZEPISALEM TO DO INNEJ KLASY
 class SPStringDecryption : Transformer {
     override fun transform(deobfuscator: Deobfuscator) {
         val stringMap = mutableMapOf<String, String>()

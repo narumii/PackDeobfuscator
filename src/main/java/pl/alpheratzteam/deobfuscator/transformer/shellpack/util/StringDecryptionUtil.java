@@ -11,14 +11,9 @@ public final class StringDecryptionUtil {
 
     public static String decrypt(String string, int size) {
         char[] chars = string.toCharArray();
-
         int i = 0;
         for (char c : chars) {
             c ^= size;
-            //Lol kurwa chlopie, rozjebales stringi w swoim obf a nawet o tym nie wiesz? xd
-            //Jedyne co trzeba zrobic, to xorowac wielkosc constant poola
-            //c ^= stringsPoolClassName.replace("/", ".").hashCode();
-            //c ^= stringsPoolClassName.replace("/", ".").hashCode();
             chars[i] = c;
             i++;
         }

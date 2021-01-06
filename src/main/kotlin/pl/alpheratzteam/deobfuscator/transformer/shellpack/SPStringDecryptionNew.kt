@@ -62,11 +62,7 @@ class SPStringDecryptionNew : Transformer {
         }
 
         println("String Base Class: $stringBaseClass")
-        deobfuscator.classes.values
-                .filter { it.name.startsWith(stringBaseClass) }
-                .forEach {
-                }
-        // TODO: 04.01.2021 change drong[number] to string using virtualizer? XD?
         println("Decrypted $index strings!")
+        // TODO: 04.01.2021 change drong[number] to string using virtualizer? XD?
     }
 }

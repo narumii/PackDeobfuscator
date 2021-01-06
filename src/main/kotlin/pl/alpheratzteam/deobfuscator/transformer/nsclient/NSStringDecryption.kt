@@ -1,5 +1,6 @@
 package pl.alpheratzteam.deobfuscator.transformer.nsclient
 
+import org.objectweb.asm.Type
 import org.objectweb.asm.tree.FieldInsnNode
 import org.objectweb.asm.tree.LdcInsnNode
 import org.objectweb.asm.tree.MethodInsnNode
@@ -22,71 +23,49 @@ class NSStringDecryption : Transformer {
         var index = 0
         deobfuscator.getClassesAsCollection().forEach { classNode ->
             val decryptMethodNode =
-                classNode.methods.stream().filter { !it.name.startsWith("<") }
-                    .findFirst()
+                    classNode.methods.stream().filter { !it.name.startsWith("<") }
+                            .findFirst()
 
-            decryptMethodNode.ifPresent {
+            decryptMethodNode.ifPresent { decryptMethod ->
                 var size = 0
-                it.instructions.forEach {
-                    if (it !is MethodInsnNode) {
-                        return@forEach
-                    }
-
-                    if (!it.owner.equals("sun/misc/SharedSecrets") || !it.name.equals("getJavaLangAccess") || !it.desc.equals("()Lsun/misc/JavaLangAccess;")) {
-                        return@forEach
-                    }
-
-                    val ldcInsnNode = it.next
-                    if (ldcInsnNode !is LdcInsnNode) {
-                        return@forEach
-                    }
-
-                    size = deobfuscator.getClassSize(
-                        deobfuscator.classes[ldcInsnNode.cst.toString().replaceFirst("L", "").replace(";", "")]
-                    )
-                }
+                decryptMethod.instructions.toArray()
+                        .filter { it is MethodInsnNode && it.owner == "sun/misc/SharedSecrets" && it.desc == "()Lsun/misc/JavaLangAccess;" }
+                        .filter { it.next is LdcInsnNode }
+                        .forEach {
+                            val ldcInsnNode = it.next as LdcInsnNode
+                            size = deobfuscator.getClassSize(deobfuscator.classes[(ldcInsnNode.cst as Type).internalName])
+                        }
 
                 if (size == 0) {
                     return@ifPresent
                 }
 
-                classNode.methods.forEach { methodNode ->
-                    if (methodNode.name.equals(it.name)) {
-                        return@forEach
-                    }
+                classNode.methods
+                        .filter { it.name != decryptMethod.name }
+                        .forEach { methodNode ->
+                            methodNode.instructions
+                                    .filter { it is LdcInsnNode }
+                                    .forEach {
+                                        val ldcInsnNode = it.next as LdcInsnNode
+                                        ldcInsnNode.cst = StringDecryptionUtil.decrypt(ldcInsnNode.cst.toString(), size)
+                                        if (!initialized) {
+                                            val string = ldcInsnNode.toString()
+                                            if (string.endsWith("=")) {
+                                                deobfuscator.decryptKey = string
+                                                println("Found decrypt key: ${deobfuscator.decryptKey}")
+                                            }
+                                        }
 
-                    methodNode.instructions.forEach {
-                        if (it !is LdcInsnNode) {
-                            return@forEach
+                                        val fieldInsnNode = it.previous
+                                        val methodInsnNode = fieldInsnNode.previous
+                                        if (fieldInsnNode !is FieldInsnNode)
+                                            return@forEach
+
+                                        methodNode.instructions.remove(methodInsnNode)
+                                        ++index
+                                    }
                         }
-
-                        it.cst = StringDecryptionUtil.decrypt(it.cst.toString(), classNode.name, size)
-                        if (!initialized) {
-                            val string = it.cst.toString()
-                            if (string.endsWith("=")) {
-                                deobfuscator.decryptKey = string
-                                println("Found decrypt key: ${deobfuscator.decryptKey}")
-                            }
-                        }
-
-                        val fieldInsnNode = it.previous
-                            ?: // FieldInsnNode?
-                            return@forEach
-
-                        val methodInsnNode = fieldInsnNode.previous
-                            ?: // MethodInsnNode?
-                            return@forEach
-
-                        if (fieldInsnNode !is FieldInsnNode) {
-                            return@forEach
-                        }
-
-                        methodNode.instructions.remove(methodInsnNode)
-                        ++index
-                    }
-                }
-
-                classNode.methods.remove(decryptMethodNode)
+                classNode.methods.remove(decryptMethod)
             }
         }
 
